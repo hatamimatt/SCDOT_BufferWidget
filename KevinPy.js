@@ -1,0 +1,1 @@
+// Convert your geometry object to a feature const feature = {   geometry: yourBufferedPolygonGeometry, // your geometry object   attributes: {     BufferDistance: userInputDistance,     CreatedDate: new Date().getTime()     // other attributes   } };  // Add to existing feature service featureLayer.applyEdits({   addFeatures: [feature] });

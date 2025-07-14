@@ -1,0 +1,19 @@
+{
+  "name": "draw-buffer-widget",
+  "label": "Draw Buffer Widget",
+  "type": "widget",
+  "version": "1.0.0",
+  "exbVersion": "1.10.0",
+  "author": "YourName",
+  "description": "Draw Buffer Widget with full map binding",
+  "properties": {
+    "hasSettingPage": true
+  },
+  "useMapWidget": true,
+  "supportsMapWidget": true,
+  "translatedLocales": ["en"],
+  "defaultSize": {
+    "width": 600,
+    "height": 400
+  }
+}
