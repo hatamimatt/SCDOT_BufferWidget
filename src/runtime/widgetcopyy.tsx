@@ -192,8 +192,6 @@ const Widget = (props: AllWidgetProps<unknown>) => {
       jimuMapView.view.cursor = 'default';
       jimuMapView.view.popup.autoOpenEnabled = true;
     }
-    setReportResults([]); // ✅ Clears printed report
-
   };
 
   // Add this function here:
@@ -234,26 +232,18 @@ const Widget = (props: AllWidgetProps<unknown>) => {
           const query = layer.createQuery();
           query.geometry = bufferGeometry;
           query.spatialRelationship = 'intersects';
-          query.returnGeometry = true;
+          query.returnGeometry = false;
           query.outFields = ['*'];
     
           const results = await (layer as __esri.FeatureLayer).queryFeatures(query);
           const count = results.features.length;
           console.log(`🔎 ${layer.title} - intersected features: ${count}`);
     
-          results.features.forEach((feature) => {
-            const geom = feature.geometry;
-            const area = geometryEngine.geodesicArea(geom, 'acres'); // Or use 'square-meters'
-            const objectId = feature.attributes?.OBJECTID ?? 'Unknown ID';
-          
-            intersectedLayers.push({
-              layerName: layer.title,
-              objectId,
-              area: area?.toFixed(2),
-              attributes: feature.attributes
-            });
+          intersectedLayers.push({
+            layerName: layer.title,
+            count,
+            fields: results.fields.map(f => f.name),
           });
-          
         } catch (error) {
           console.error(`❌ Error querying ${layer.title}`, error);
         }
@@ -277,10 +267,9 @@ const Widget = (props: AllWidgetProps<unknown>) => {
     if (intersectedLayers.length === 0) {
       setReportResults(["No features intersect with the buffer."]);
     } else {
-      const reportText = intersectedLayers.map(item =>
-        `Layer: ${item.layerName} | ID: ${item.objectId} | Area: ${item.area} acres`
+      const reportText = intersectedLayers.map(layer =>
+        `Layer: ${layer.layerName} — Intersected features: ${layer.count}`
       );
-      
       setReportResults(reportText);
     }
     };
